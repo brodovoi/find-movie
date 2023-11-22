@@ -2,20 +2,60 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, Button, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+// const getRandomMovie = async () => {
+//   try {
+//     const apiKey = 'fb16b356ee60f42317bc4549500d69c4';
+//     const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=ru-RU&sort_by=popularity.desc&page=1`);
+//     const data = await response.json();
+//     if (data.results.length === 0) {
+//       throw new Error('No movies found');
+//     }
+//     const randomMovie = data.results[Math.floor(Math.random() * data.results.length)];
+//     return randomMovie;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
+
 const getRandomMovie = async () => {
   try {
     const apiKey = 'fb16b356ee60f42317bc4549500d69c4';
-    const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=ru-RU&sort_by=popularity.desc&page=1`);
+    const response = await fetch(
+      `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=ru-RU&sort_by=popularity.desc&page=1`
+    );
     const data = await response.json();
     if (data.results.length === 0) {
       throw new Error('No movies found');
     }
     const randomMovie = data.results[Math.floor(Math.random() * data.results.length)];
-    return randomMovie;
+
+    // Дополнительный запрос для получения детальной информации о фильме
+    const detailedResponse = await fetch(
+      `https://api.themoviedb.org/3/movie/${randomMovie.id}?api_key=${apiKey}&language=ru-RU`
+    );
+    const detailedData = await detailedResponse.json();
+
+    // Дополнительный запрос для получения списка жанров
+    const genresResponse = await fetch(
+      `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=ru-RU`
+    );
+    const genresData = await genresResponse.json();
+
+    // Преобразование идентификаторов жанров в их имена
+    const genres = randomMovie.genre_ids.map((genreId) => {
+      const genre = genresData.genres.find((genre) => genre.id === genreId);
+      return genre ? genre.name : '';
+    });
+
+    // Объединяем информацию о фильме, деталях и жанрах
+    const movieWithDetails = { ...randomMovie, ...detailedData, genres };
+
+    return movieWithDetails;
   } catch (error) {
     throw error;
   }
 };
+
 
 const RandomMovieScreen = () => {
   const [randomMovie, setRandomMovie] = useState(null);
@@ -46,6 +86,7 @@ const RandomMovieScreen = () => {
 
   const handlePressMovieDetails = () => {
     if (randomMovie) {
+      console.log('Детали фильма:', randomMovie); 
       navigation.navigate('Детали фильма', { movie: randomMovie });
     }
   };
@@ -71,11 +112,6 @@ const RandomMovieScreen = () => {
           </TouchableOpacity>
         </View>
       )}
-      {/* <Button
-        title="Найти Случайный фильм"
-        onPress={handlePressRandomMovie}
-        style={styles.button}
-      /> */}
       <TouchableOpacity
         style={styles.button}
         onPress={handlePressRandomMovie}
