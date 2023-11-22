@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import React from 'react';
+import { ScrollView, View, Text, Image, StyleSheet, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const MovieDetailsScreen = ({ route }) => {
   const { movie } = route.params;
-  
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Image
         style={styles.poster}
         source={{
@@ -15,16 +17,19 @@ const MovieDetailsScreen = ({ route }) => {
       <Text style={styles.title}>{movie.title}</Text>
       <Text style={styles.originalTitle}>Оригинальное название: {movie.original_title}</Text>
       <Text style={styles.rating}>Рейтинг: {movie.vote_average}</Text>
-      <Text style={styles.overview}>{movie.overview}</Text>
-    </View>
+      <Text style={styles.overview}>
+        {movie.overview}
+      </Text>
+      <Button title="Назад" onPress={() => navigation.goBack()} />
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
+    justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
   },
   poster: {
     width: 300,
@@ -39,7 +44,6 @@ const styles = StyleSheet.create({
   },
   originalTitle: {
     fontSize: 16,
-    color: 'gray',
     marginBottom: 10,
   },
   rating: {
@@ -51,6 +55,8 @@ const styles = StyleSheet.create({
   overview: {
     fontSize: 16,
     textAlign: 'center',
+    marginHorizontal: 20,
+    marginBottom: 20,
   },
 });
 
