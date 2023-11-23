@@ -2,8 +2,12 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import BottomTabStack from './BottomTabStack';
+// import BottomTabStack from './BottomTabStack';
 import SettingsScreen from './screens/SettingsScreen';
+
+import RandomMovieScreen from './screens/RandomMovieScreen';
+import MovieDetailsScreen from './screens/MovieDetailsScreen';
+
 
 const Tab = createBottomTabNavigator();
 
