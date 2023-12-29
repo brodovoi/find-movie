@@ -9,7 +9,7 @@ const MoviesListScreen = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Все фильмы" component={AllMoviesScreen} />
-      <Tab.Screen name="Все фильмы 2" component={AllMoviesScreen} />
+      <Tab.Screen name="Сериалы" component={AllMoviesScreen} />
     </Tab.Navigator>
   );
 };
