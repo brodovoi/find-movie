@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, Picker, StyleSheet } from 'react-native';
 
-const SettingsScreen = () => {
-    
+const ProfileScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>Экран SettingsScreen</Text>
+      <Text>Экран ProfileScreen</Text>
       {/* Добавьте компоненты для настроек */}
     </View>
   );
@@ -19,4 +18,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SettingsScreen;
+export default ProfileScreen;
